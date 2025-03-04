@@ -93,10 +93,6 @@
 #  mysql_data:
 #  mongodb_data:
 #  postgres_data:
-
-
-version: '3.8'
-
 services:
   mysql_db:
     image: mysql:latest
