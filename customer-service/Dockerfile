@@ -1,5 +1,5 @@
 ARG PYTHON_VERSION=3.13.2
-FROM python:${PYTHON_VERSION} as base
+FROM python:${PYTHON_VERSION} AS base
 
 WORKDIR /app
 

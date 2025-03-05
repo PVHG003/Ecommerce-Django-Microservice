@@ -61,6 +61,8 @@ class AddItemView(APIView):
 class ItemListView(APIView):
     def get(self, request):
         items = ItemModel.get_all_items()
+        for item in items:
+            item["_id"] = str(item["_id"])
         return Response({"items": items}, status=status.HTTP_200_OK)
 
 
@@ -115,4 +117,6 @@ class SearchItemView(APIView):
 class FilterItemView(APIView):
     def get(self, request, category):
         items = ItemModel.filter_by_category(category)
+        for item in items:
+            item["_id"] = str(item["_id"])
         return Response({"items": items}, status=status.HTTP_200_OK)

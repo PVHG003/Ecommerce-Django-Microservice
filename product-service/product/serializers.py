@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 
 class BaseItemSerializer(serializers.Serializer):
-    category = serializers.ChoiceField(choices=["books", "smartphones", "fashions"])
+    category = serializers.ChoiceField(choices=["books", "mobiles", "fashions"])
     name = serializers.CharField(max_length=255)
     price = serializers.FloatField(min_value=0.0)
     stock = serializers.IntegerField(min_value=0)

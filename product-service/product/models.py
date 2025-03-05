@@ -12,7 +12,7 @@ class ItemModel:
 
     @staticmethod
     def get_all_items():
-        result = list(ItemModel.collection.find({}, {"_id": 0}))
+        result = list(ItemModel.collection.find({}))
         return result
 
     @staticmethod

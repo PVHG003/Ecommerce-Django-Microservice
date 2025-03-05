@@ -8,6 +8,33 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Address
 from .serializers import CustomerSerializer, AddressSerializer, RegisterSerializer, LoginSerializer
 
+def fetch_customer_orders():
+    pass
+
+# def generate_access_token(user):
+#     payload = {
+#         "id": user.id,
+#         "type": "access",
+#         "user_id": user.id,
+#         # "user": CustomerSerializer(user).data,
+#         "exp": datetime.now() + timedelta(minutes=60),
+#         "iat": datetime.now()
+#     }
+#     token = jwt.encode(payload, os.getenv("JWT_SIGNING_KEY"), algorithm="HS256")
+#     return token
+#
+#
+# def generate_refresh_token(user):
+#     payload = {
+#         "id": user.id,
+#         "type": "refresh",
+#         "user_id": user.id,
+#         # "user": CustomerSerializer(user).data,
+#         "exp": datetime.now() + timedelta(days=30),
+#         "iat": datetime.now()
+#     }
+#     token = jwt.encode(payload, os.getenv("JWT_SIGNING_KEY"), algorithm="HS256")
+#     return token
 
 class RegisterView(APIView):
     def post(self, request):
@@ -15,12 +42,15 @@ class RegisterView(APIView):
 
         if serializer.is_valid():
             user = serializer.save()  # Uses overridden create() method
-            refresh = RefreshToken.for_user(user)
+            # refresh = generate_refresh_token(user)
+            # access = generate_access_token(user)
+            # refresh = RefreshToken.for_user(user)
 
             return Response({
-                'user': serializer.data,
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
+                # 'user': serializer.data,
+                # 'refresh': refresh,
+                # 'access': str(refresh.access_token),
+                'message': 'Registration successful.'
             }, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -40,9 +70,12 @@ class LoginView(APIView):
                     'data': serializer.data
                 }, status=status.HTTP_401_UNAUTHORIZED)
 
+            # refresh = generate_refresh_token(user)
+            # access = generate_access_token(user)
             refresh = RefreshToken.for_user(user)
+
             return Response({
-                'refresh': str(refresh),
+                'refresh': refresh,
                 'access': str(refresh.access_token),
             }, status=status.HTTP_200_OK)
 
@@ -65,7 +98,7 @@ class ProfileView(APIView):
 
 
 class ManageAddressesView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request):
         addresses = request.user.addresses.all()
@@ -106,20 +139,3 @@ class CustomerOrdersView(APIView):
     def get(self, request):
         customer_id = request.user.id
 
-        fake_orders = [
-            {"order_id": 1, "customer_id": customer_id, "item_id": "abc123", "quantity": 2, "status": "delivered"},
-            {"order_id": 2, "customer_id": customer_id, "item_id": "xyz456", "quantity": 1, "status": "shipped"},
-        ]
-
-        # Fake item details from Items Service
-        fake_items = {
-            "abc123": {"name": "Laptop", "price": 1200, "category": "Electronics"},
-            "xyz456": {"name": "Phone", "price": 800, "category": "Mobiles"},
-        }
-
-        # Merge order details with item details
-        for order in fake_orders:
-            item_id = order["item_id"]
-            order["item_details"] = fake_items.get(item_id, {"name": "Unknown", "price": 0, "category": "Unknown"})
-
-        return Response(fake_orders, status=status.HTTP_200_OK)
