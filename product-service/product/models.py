@@ -39,3 +39,7 @@ class ItemModel:
     @staticmethod
     def filter_by_category(category):
         return list(ItemModel.collection.find({"category": category}))
+
+    @staticmethod
+    def get_seller_items(seller_id):
+        return list(ItemModel.collection.find({"seller_id": seller_id}))

@@ -15,8 +15,9 @@ class Cart(models.Model):
 class CartItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
-    item = models.JSONField()
     item_id = models.CharField(max_length=100)
+    item = models.JSONField()
+    quantity = models.IntegerField()
     # item response example {
     #             "_id": "67c719c623a87b7f8f5af6a6",
     #             "category": "books",
@@ -31,4 +32,3 @@ class CartItem(models.Model):
     #                 "https://res.cloudinary.com/dnugdgi2v/image/upload/v1741101507/assets/books/psgqvvf101u6rbbrwr0a.jpg"
     #             ]
     # }
-    quantity = models.IntegerField()

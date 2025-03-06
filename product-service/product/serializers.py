@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 
 class BaseItemSerializer(serializers.Serializer):
+    seller_id = serializers.CharField(max_length=255, required=False)
     category = serializers.ChoiceField(choices=["books", "mobiles", "fashions"])
     name = serializers.CharField(max_length=255)
     price = serializers.FloatField(min_value=0.0)
@@ -9,6 +10,9 @@ class BaseItemSerializer(serializers.Serializer):
     image_urls = serializers.ListSerializer(
         child=serializers.URLField(), required=False, allow_empty=True
     )
+
+    # def create(self, validated_data):
+    #     return ItemModel.create_item(validated_data)
 
 
 class BookSerializer(BaseItemSerializer):

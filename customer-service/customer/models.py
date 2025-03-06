@@ -7,7 +7,6 @@ class Customer(AbstractUser):
         ('regular', 'Regular Customer'),
         ('premium', 'Premium Customer'),
         ('seller', 'Seller'),
-        ('admin', 'Admin'),
     ]
 
     phone = models.CharField(max_length=20)

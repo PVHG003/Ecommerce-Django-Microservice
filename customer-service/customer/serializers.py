@@ -1,9 +1,20 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import Address, Customer
 
 
 # Customer = get_user_model()
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token["role"] = user.customer_type
+        token["username"] = user.username
+        token["email"] = user.email
+        return token
+
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,7 +49,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ['username', 'email', 'password', 'confirm_password', 'first_name', 'last_name']
+        fields = ['username', 'email', 'password', 'confirm_password', 'first_name', 'last_name', 'customer_type']
 
     def validate_email(self, value):
         if Customer.objects.filter(email=value).exists():
